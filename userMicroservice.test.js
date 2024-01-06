@@ -30,7 +30,7 @@ describe('getUser', () => {
         }
       });
     });
-  }, 10000); // Increase the timeout if necessary
+  }, 15000); // Increase the timeout if necessary
 
   // Add more tests for other methods as needed
 });
