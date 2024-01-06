@@ -8,6 +8,9 @@ beforeAll(async () => {
   client = new userProto.UserService('localhost:50051', grpc.credentials.createInsecure());
 });
 
+
+
+
 afterAll(async () => {
   await stopServer();
 });
@@ -29,5 +32,7 @@ describe('getUser', () => {
     });
   }, 10000); // Increase the timeout if necessary
 
+  // Add more tests for other methods as needed
 });
 
+// Add more describe blocks and tests for other service methods if needed

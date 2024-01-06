@@ -29,4 +29,5 @@ describe('User gRPC Service Integration', () => {
     });
   });
 
+  // Add more tests for other gRPC service methods as needed
 });

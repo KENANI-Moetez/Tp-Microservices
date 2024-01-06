@@ -41,11 +41,14 @@ const userService = {
   },
 };
 
+const server = new grpc.Server();
+server.addService(userProto.UserService.service, userService);
+
 const startServer = (port) => {
   return new Promise((resolve, reject) => {
-    server.bindAsync(`localhost:${port}`, grpc.ServerCredentials.createInsecure(), (err, boundPort) => {
+    server.bindAsync(`0.0.0.0:${port}`, grpc.ServerCredentials.createInsecure(), (err, boundPort) => {
       if (err) {
-        console.error(`Failed to bind server to localhost:${port}`, err);
+        console.error(`Failed to bind server to 0.0.0.0:${port}`, err);
         reject(err);
         return;
       }
@@ -64,8 +67,5 @@ const stopServer = () => {
     });
   });
 };
-
-const server = new grpc.Server();
-server.addService(userProto.UserService.service, userService);
 
 module.exports = { userProto, server, startServer, stopServer };
