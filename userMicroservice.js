@@ -1,7 +1,6 @@
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 
-// Load the user proto file
 const userProtoPath = 'user.proto';
 const userProtoDefinition = protoLoader.loadSync(userProtoPath, {
   keepCase: true,
@@ -42,17 +41,31 @@ const userService = {
   },
 };
 
-// Create and start the gRPC server
+const startServer = (port) => {
+  return new Promise((resolve, reject) => {
+    server.bindAsync(`localhost:${port}`, grpc.ServerCredentials.createInsecure(), (err, boundPort) => {
+      if (err) {
+        console.error(`Failed to bind server to localhost:${port}`, err);
+        reject(err);
+        return;
+      }
+      console.log(`Server is running on port ${boundPort}`);
+      server.start();
+      resolve(boundPort);
+    });
+  });
+};
+
+const stopServer = () => {
+  return new Promise((resolve, reject) => {
+    server.tryShutdown(() => {
+      console.log('Server has been successfully shut down.');
+      resolve();
+    });
+  });
+};
+
 const server = new grpc.Server();
 server.addService(userProto.UserService.service, userService);
-const port = 50051;
-server.bindAsync(`0.0.0.0:${port}`, grpc.ServerCredentials.createInsecure(), (err, port) => {
-  if (err) {
-    console.error('Failed to bind server:', err);
-    return;
-  }
-  console.log(`Server is running on port ${port}`);
-  server.start();
-});
 
-console.log(`User microservice is running on port ${port}`);
+module.exports = { userProto, server, startServer, stopServer };
