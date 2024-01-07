@@ -1,3 +1,6 @@
+// apiGateway.js
+require('dotenv').config(); // Load environment variables from .env file
+
 const express = require('express');
 const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
@@ -5,11 +8,16 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
-const productProtoPath = 'product.proto'; 
+const productProtoPath = 'product.proto';
 const resolvers = require('./resolvers');
-const typeDefs = require('./schema'); 
+const typeDefs = require('./schema');
+
 // Create a new Express application
 const app = express();
+
+// Load environment variables for service addresses
+const productServiceAddress = process.env.PRODUCT_SERVICE_ADDRESS || 'localhost:50055';
+const userServiceAddress = process.env.USER_SERVICE_ADDRESS || 'localhost:50051';
 
 const productProtoDefinition = protoLoader.loadSync(productProtoPath, {
   keepCase: true,
@@ -39,12 +47,15 @@ server.start().then(() => {
   app.use(cors(), bodyParser.json(), expressMiddleware(server));
 });
 
-app.get('/products', (req, res) => { //products
+// Define routes for products and users
+app.get('/products', (req, res) => {
+  // gRPC client for the product service
   const client = new productProto.ProductService(
-    'localhost:50055', // Update the gRPC server address and port
+    productServiceAddress,
     grpc.credentials.createInsecure()
   );
 
+  // Call the gRPC method to search for products
   client.searchProducts({}, (err, response) => {
     if (err) {
       res.status(500).send(err);
@@ -54,13 +65,16 @@ app.get('/products', (req, res) => { //products
   });
 });
 
-app.get('/products/:id', (req, res) => { // Change /movies/:id to /products/:id
+app.get('/products/:id', (req, res) => {
+  // gRPC client for the product service
   const client = new productProto.ProductService(
-    'localhost:50055', // Update the gRPC server address and port
+    productServiceAddress,
     grpc.credentials.createInsecure()
   );
-  
+
   const id = req.params.id;
+  
+  // Call the gRPC method to get a specific product by ID
   client.getProduct({ product_id: id }, (err, response) => {
     if (err) {
       res.status(500).send(err);
@@ -71,11 +85,13 @@ app.get('/products/:id', (req, res) => { // Change /movies/:id to /products/:id
 });
 
 app.get('/users', (req, res) => {
+  // gRPC client for the user service
   const client = new userProto.UserService(
-    'localhost:50051', // Update the gRPC server address and port
+    userServiceAddress,
     grpc.credentials.createInsecure()
   );
 
+  // Call the gRPC method to search for users
   client.searchUsers({}, (err, response) => {
     if (err) {
       res.status(500).send(err);
@@ -86,12 +102,15 @@ app.get('/users', (req, res) => {
 });
 
 app.get('/users/:id', (req, res) => {
+  // gRPC client for the user service
   const client = new userProto.UserService(
-    'localhost:50051', // Update the gRPC server address and port
+    userServiceAddress,
     grpc.credentials.createInsecure()
   );
-  
+
   const id = req.params.id;
+  
+  // Call the gRPC method to get a specific user by ID
   client.getUser({ id: id }, (err, response) => {
     if (err) {
       res.status(500).send(err);

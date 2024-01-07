@@ -1,6 +1,3 @@
-const { gql } = require('@apollo/server');
-
-// Define the GraphQL schema
 const typeDefs = `#graphql
   type Product {
     id: String!
@@ -10,8 +7,9 @@ const typeDefs = `#graphql
 
   type User {
     id: String!
-    title: String!
-    description: String!
+    username: String!
+    email: String!
+    role: String!
   }
 
   type Query {
