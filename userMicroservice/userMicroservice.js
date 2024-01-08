@@ -1,7 +1,7 @@
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
+const userProtoPath = 'userMicroservice/user.proto';
 
-const userProtoPath = 'user.proto';
 const userProtoDefinition = protoLoader.loadSync(userProtoPath, {
   keepCase: true,
   longs: String,
@@ -46,7 +46,7 @@ server.addService(userProto.UserService.service, userService);
 
 const startServer = (port) => {
   return new Promise((resolve, reject) => {
-    server.bindAsync(`0.0.0.0:${port}`, grpc.ServerCredentials.createInsecure(), (err, boundPort) => {
+    server.bindAsync(`localhost:${port}`, grpc.ServerCredentials.createInsecure(), (err, boundPort) => {
       if (err) {
         console.error(`Failed to bind server to 0.0.0.0:${port}`, err);
         reject(err);
