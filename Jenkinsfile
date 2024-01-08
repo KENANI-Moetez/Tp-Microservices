@@ -21,17 +21,17 @@ pipeline {
             sh 'docker build -t kenanimoetez/user-management-microservice:tagname .'
             }
         }
-
-    
-
-        stage('Push to DockerHub') {
+        stage('Unit Testing') {
             steps {
                 script {
-                    // Push Docker image to DockerHub
-                    sh 'docker push kenanimoetez/user-management-microservice:tagname'
+                    // Install dependencies and run unit tests
+                    sh 'cd userMicroservice && npm install'
+                    sh 'cd userMicroservice && npm test'
                 }
             }
         }
+    
+
         stage('Cleanup') {
             steps {
                 script {
