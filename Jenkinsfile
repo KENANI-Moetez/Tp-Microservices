@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     // Install dependencies and run unit tests
-                    sh 'cd userMicroservice && npm install'
+                    sh 'cd userMicroservice && sudo apt install npm'
                     sh 'cd userMicroservice && npm test'
                 }
             }
