@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpc-microservice-deployment
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: grpc-microservice
+  template:
+    metadata:
+      labels:
+        app: grpc-microservice
+    spec:
+      containers:
+        - name: grpc-microservice-container
+          image: your-image
+          ports:
+            - containerPort: 50051
