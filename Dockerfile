@@ -2,8 +2,7 @@
 FROM node:lastest
 
 # Set the working directory to /app
-WORKDIR /tp-microservices 
-
+WORKDIR /usr/src/app
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
