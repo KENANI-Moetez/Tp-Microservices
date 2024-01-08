@@ -18,7 +18,7 @@ pipeline {
 
         stage("build image"){
             steps{
-            sh 'docker build -t kenanimoetez/user-management-microservice:lastest .'
+            sh 'docker build -t kenanimoetez/user-management-microservice:tagname .'
             }
         }
 
@@ -34,7 +34,7 @@ pipeline {
             steps {
                 script {
                     // Push Docker image to DockerHub
-                    sh 'docker push kenanimoetez/user-management-microservice:lastest'
+                    sh 'docker push kenanimoetez/user-management-microservice:tagname'
                 }
             }
         }
