@@ -15,20 +15,7 @@ pipeline {
             }
         }
 
-        stage('Unit Testing') {
-            steps {
-                script {
-                    // Install Node.js and npm
-                    
-
-                    // Install dependencies and run unit tests
-                
-                    sh 'sudo apt install npm'
-                    sh 'npm test'
-                }
-            }
-        }
-
+        
         stage("Build") {
             steps {
                 script {
@@ -36,6 +23,9 @@ pipeline {
                     sh 'npm run build'
                 }
             }
+        }
+        stage("build image"){
+            sh 'docker build -t mmicroservice-app:1.0 .'
         }
     }
 }
