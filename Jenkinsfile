@@ -43,7 +43,7 @@ pipeline {
         }   
         stage('Push Image to Docker Hub') {         
             steps{                            
-                sh 'sudo docker push <dockerhubusername>/user-management-microservice:$BUILD_NUMBER'           
+                sh 'docker push kenanimoetez/user-management-microservice:tagname'           
                 echo 'Push Image Completed'       
             }            
         }  
