@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-       DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub')
     }
 
     stages {
@@ -10,25 +10,34 @@ pipeline {
             steps {
                 script {
                     // Explicitly checkout the main branch
-                   checkout scm
+                    checkout scm
                 }
             }
         }
+
         stage('Unit Testing') {
             steps {
-                
+                script {
+                    // Install Node.js and npm
+                    tools {
+                        nodejs 'nodejs' // Assuming you have a Node.js tool installation named 'nodejs'
+                    }
+
                     // Install dependencies and run unit tests
-                    sh 'cd userMicroservice ' 
-                    sh' sudo apt install npm'
+                    sh 'cd userMicroservice'
+                    sh 'npm install'
                     sh 'npm test'
-                
+                }
             }
         }
-        stage("Build"){
+
+        stage("Build") {
             steps {
-                sh 'npm run build'
+                script {
+                    // Run build
+                    sh 'npm run build'
+                }
             }
         }
-        
     }
 }
