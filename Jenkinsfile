@@ -16,12 +16,12 @@ pipeline {
         }
         stage('Unit Testing') {
             steps {
-                script {
+                
                     // Install dependencies and run unit tests
                     sh 'cd userMicroservice ' 
                     sh' sudo apt install npm'
                     sh 'npm test'
-                }
+                
             }
         }
         stage("Build"){
