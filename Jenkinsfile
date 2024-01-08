@@ -41,7 +41,12 @@ pipeline {
 	            echo 'Login Completed'      
             }           
         }   
-    
+        stage('Push Image to Docker Hub') {         
+            steps{                            
+                sh 'sudo docker push <dockerhubusername>/<dockerhubreponame>:$BUILD_NUMBER'           
+                echo 'Push Image Completed'       
+            }            
+        }  
 
         stage('Cleanup') {
             steps {
