@@ -25,8 +25,8 @@ pipeline {
             steps {
                 script {
                     // Install dependencies and run unit tests
-                    sh 'cd userMicroservice && npm install'
-                    sh 'cd userMicroservice && npm test'
+                    sh 'cd userMicroservice && npm install npm install --save-dev jest'
+                    sh 'cd userMicroservice && npm run test'
                 }
             }
         }
