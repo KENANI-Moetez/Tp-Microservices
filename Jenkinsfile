@@ -19,13 +19,11 @@ pipeline {
             steps {
                 script {
                     // Install Node.js and npm
-                    tools {
-                        nodejs 'nodejs' // Assuming you have a Node.js tool installation named 'nodejs'
-                    }
+                    
 
                     // Install dependencies and run unit tests
                     sh 'cd userMicroservice'
-                    sh 'npm install'
+                    sh 'sudo apt install npm'
                     sh 'npm test'
                 }
             }
