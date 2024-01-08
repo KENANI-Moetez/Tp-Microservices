@@ -10,11 +10,24 @@ pipeline {
             steps {
                 script {
                     // Explicitly checkout the main branch
-                    checkout([$class: 'GitSCM', branches: [[name: 'main']], userRemoteConfigs: [[url: 'https://github.com/KENANI-Moetez/Tp-Microservices.git']]])
+                   checkout scm
                 }
             }
         }
-
+        stage('Unit Testing') {
+            steps {
+                script {
+                    // Install dependencies and run unit tests
+                    sh 'cd userMicroservice && npm install'
+                    sh 'cd userMicroservice && npm test'
+                }
+            }
+        }
+        stage("Build"){
+            steps {
+                sh 'npm run build'
+            }
+        }
         stage('Login to DockerHub') {
             steps {
                 script {
@@ -35,15 +48,7 @@ pipeline {
 }
 
 
-        stage('Unit Testing') {
-            steps {
-                script {
-                    // Install dependencies and run unit tests
-                    sh 'cd userMicroservice && npm install'
-                    sh 'cd userMicroservice && npm test'
-                }
-            }
-        }
+       
 
        stage('Push to DockerHub') {
     steps {
