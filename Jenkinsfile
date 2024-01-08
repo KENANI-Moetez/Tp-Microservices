@@ -25,6 +25,7 @@ pipeline {
             }
         }
         stage("build image"){
+            steps{
             sh 'docker build -t mmicroservice-app:1.0 .'
         }
     }
