@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-microservice-loadbalancer
+spec:
+  type: LoadBalancer
+  selector:
+    app: my-microservice
+  ports:
+    - protocol: TCP
+      port: 80  # External port on which the service will be exposed
+      targetPort: 8080  # Port on which the application is running in the pods

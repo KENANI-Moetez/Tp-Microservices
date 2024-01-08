@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        DOCKER_IMAGE = "kenanimoetez/user-management-microservice:latest"
+       DOCKERHUB_CREDENTIALS = credentials('dockerhub')
     }
 
     stages {
@@ -15,15 +15,25 @@ pipeline {
             }
         }
 
-        stage('Build Image') {
+        stage('Login to DockerHub') {
             steps {
                 script {
-                    echo "Building Docker image: ${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
-                    // Build Docker image with version tag
-                    docker.build "${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
+                    // Login to DockerHub using credentials
+                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u kenanimoetez --password-stdin'
                 }
             }
         }
+
+        stage('Build Image') {
+    steps {
+        script {
+            // Build Docker image with version tag
+           // sh 'docker build -t kenanimoetez/user-management-microservice:$BUILD_NUMBER .'
+          sh 'docker build -t mmicroservice-app:1.0 .'
+        }
+    }
+}
+
 
         stage('Unit Testing') {
             steps {
@@ -35,22 +45,22 @@ pipeline {
             }
         }
 
-        stage('Push to DockerHub') {
-            steps {
-                script {
-                    // Push Docker image to DockerHub
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-credentials') {
-                        docker.image("${DOCKER_IMAGE}:${env.BUILD_NUMBER}").push()
-                    }
-                }
-            }
+       stage('Push to DockerHub') {
+    steps {
+        script {
+            // Push Docker image to DockerHub
+            sh 'docker push kenanimoetez/user-management-microservice:latest'
+            sh 'docker push kenanimoetez/user-management-microservice:$BUILD_NUMBER'
         }
+    }
+}
+
 
         stage('Cleanup') {
             steps {
                 script {
                     // Cleanup - remove local Docker image
-                    sh 'docker rmi ${DOCKER_IMAGE}:${env.BUILD_NUMBER}'
+                    sh 'docker rmi kenanimoetez/user-management-microservice:$BUILD_NUMBER'
                 }
             }
         }

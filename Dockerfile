@@ -1,8 +1,8 @@
 # Use an official Node.js runtime as a parent image
-FROM node:14
+FROM node:lastest
 
 # Set the working directory to /app
-WORKDIR /app
+WORKDIR /tp-microservices 
 
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
@@ -18,3 +18,5 @@ EXPOSE 3000
 
 # Command to run the application
 CMD ["npm", "start"]
+
+ADD . . 
