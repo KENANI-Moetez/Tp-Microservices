@@ -22,14 +22,7 @@ pipeline {
             }
         }
 
-       stage('Login to DockerHub') {
-            steps {
-                 script {
-                    // Login to DockerHub using credentials
-                    sh 'echo $DOCKERHUB_CREDENTIALS_TOKEN | docker login -u $DOCKERHUB_CREDENTIALS_USERNAME --password-stdin'
-                }
-            }
-        }
+    
 
         stage('Push to DockerHub') {
             steps {
